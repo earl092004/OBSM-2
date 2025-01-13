@@ -8,7 +8,14 @@ use League\Csv\Reader;
 class BookController extends Controller
 {
 
+    public function index()
+    {
+        // Get all books from the database
+        $books = Book::all();
 
+        // Return the books to the view
+        return view('books.index', compact('books'));
+    }
 
   // BookController.php
 public function showBooks()
@@ -76,21 +83,30 @@ public function store(Request $request)
         'title' => 'required|string|max:255',
         'author' => 'required|string|max:255',
         'genre' => 'required|string|max:255',
-        'year' => 'required|integer',  // Ensure the year is an integer
-        'cover_image' => 'required|url',  // Ensure the cover image is a valid URL
+        'year' => 'required|integer',
+        'cover_image' => 'required|url',
+        'price' => 'required|numeric',
+        'quantity' => 'required|integer',
+        'description' => 'required|string|max:500',
+        'rating' => 'required|numeric|min:1|max:5', // Validate rating to be between 1 and 5
     ]);
 
-    // Create the book record
+    // Create the book record with the rating
     Book::create([
         'title' => $request->title,
         'author' => $request->author,
         'genre' => $request->genre,
-        'year' => $request->year,  // Add this line
-        'cover_image' => $request->cover_image,  // Add this line
+        'year' => $request->year,
+        'cover_image' => $request->cover_image,
+        'price' => $request->price,
+        'quantity' => $request->quantity,
+        'description' => $request->description,
+        'rating' => $request->rating, // Store rating
     ]);
 
     return redirect()->route('books.index')->with('success', 'Book added successfully!');
 }
+
 
 
 public function search(Request $request)

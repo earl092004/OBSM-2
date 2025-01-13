@@ -4,6 +4,8 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\BookController;
+use App\Http\Controllers\Auth\AuthenticatedSessionController;
+use App\Models\Genre;
 Route::get('/user_list_of_books', function () {
     return view('user_list_of_books');
 })->name('books.list');
@@ -21,10 +23,12 @@ Route::get('/categories', function () {
 })->name('categories');
 
 
+
+
+
 Route::get('/', function () {
     return view('home'); // Homepage of the library system
 })->name('home');
-
 
 Route::get('/add-user', function () {
     return view('add-user');
@@ -33,12 +37,25 @@ Route::get('/add-user', function () {
 Route::get('/user-homepage', function () {
     return view('user_homepage');
 })->name('user_homepage');
-// Admin-specific routes (requires 'auth' and 'admin' middleware)
-// Route::get('/admin-users', [UserController::class, 'adminIndex'])->name('admin_users.index');
-// Route::post('/admin-users', [UserController::class, 'storeAdmin'])->name('admin_users.store');
-//     Route::get('/admin-users/{id}/edit', [UserController::class, 'editAdmin'])->name('admin_users.edit');
-//     Route::put('/admin-users/{id}', [UserController::class, 'updateAdmin'])->name('admin_users.update');
-//     Route::delete('/admin-users/{id}', [UserController::class, 'destroyAdmin'])->name('admin_users.destroy');
+
+
+
+Route::get('/login', function () {
+    return view('login');  // Login page view
+})->name('login');
+
+Route::post('/login', [AuthenticatedSessionController::class, 'store'])->name('login.post');
+
+// Admin routes
+Route::get('/home', function () {
+    return view('home');  // Admin dashboard view
+})->name('home');  // Admin home route
+
+// User routes
+Route::get('/user_homepage', function () {
+    return view('user_homepage');  // User home view
+})->name('user_homepage');
+
 
 // Route::middleware(['auth', 'admin'])->group(function () {
     Route::get('/admin-users', [UserController::class, 'adminIndex'])->name('admin_users.index');
@@ -46,22 +63,6 @@ Route::get('/user-homepage', function () {
     Route::get('/admin-users/{id}/edit', [UserController::class, 'editAdmin'])->name('admin_users.edit');
     Route::put('/admin-users/{id}', [UserController::class, 'updateAdmin'])->name('admin_users.update');
     Route::delete('/admin-users/{id}', [UserController::class, 'destroyAdmin'])->name('admin_users.destroy');
-
-
-
-
-
-
-// });
-
-// Route::middleware(['auth', 'admin'])->group(function () {
-//     Route::post("/logout",[UserController::class,"logout"])->name("logout");
-//     Route::get('/admin-users', [UserController::class, 'adminIndex'])->name('admin_users.index');
-//     Route::post('/admin-users', [UserController::class, 'storeAdmin'])->name('admin_users.store');
-//     Route::get('/admin-users/{id}/edit', [UserController::class, 'editAdmin'])->name('admin_users.edit');
-//     Route::put('/admin-users/{id}', [UserController::class, 'updateAdmin'])->name('admin_users.update');
-//     Route::delete('/admin-users/{id}', [UserController::class, 'destroyAdmin'])->name('admin_users.destroy');
-// });
 
 // User management routes (requires 'auth' middleware)
 // Route::middleware('auth')->group(function () {
@@ -111,6 +112,9 @@ Route::get('/homepage', function () {
     return view('user_homepage');
 })->middleware('auth')->name('user_homepage');
 
+Route::get('/books', function () {
+    return view('books');
+})->name('books.index');
 
 
 //book part
@@ -138,6 +142,7 @@ Route::get('/user_list_of_books', [BookController::class, 'showBooks'])->name('b
 
     // Books management
     Route::get('/books', [UserController::class, 'booksIndex'])->name('books.index');
+// Route::get('/books', [BookController::class, 'index'])->name('books.index');
 
 
 
@@ -160,3 +165,7 @@ Route::middleware('auth')->group(function () {
     Route::post('/profile/delete', [UserController::class, 'deleteAccount'])->name('profile.delete');
 
 });
+
+
+
+

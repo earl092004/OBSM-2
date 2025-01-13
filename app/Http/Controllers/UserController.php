@@ -78,25 +78,26 @@ public function destroyAdmin($id)
     // Store a new user
 
     public function store(Request $request)
-    {
-        $credentials = $request->only('email', 'password');
+{
+    $validatedData = $request->validate([
+        'name' => 'required|string|max:255',
+        'email' => 'required|email|unique:users,email',
+        'phone_number' => 'required|string|max:15',
+        'subscription_type' => 'required|in:regular,silver,premium',
+        'password' => 'required|confirmed|min:8',
+    ]);
 
-        if (Auth::attempt($credentials)) {
-            $request->session()->regenerate();
+    // Create user
+    User::create([
+        'name' => $validatedData['name'],
+        'email' => $validatedData['email'],
+        'phone_number' => $validatedData['phone_number'],
+        'subscription_type' => $validatedData['subscription_type'],
+        'password' => bcrypt($validatedData['password']),  // Hash the password before storing
+    ]);
 
-            $user = Auth::user();
-
-            if ($user->hasRole('admin')) {
-                return redirect()->route('admin.home');  // Redirect to admin homepage
-            }
-
-            return redirect()->route('user_homepage');  // Redirect to user homepage
-        }
-
-        return back()->withErrors([
-            'email' => 'The provided credentials do not match our records.',
-        ]);
-    }
+    return redirect()->route('users.index')->with('success', 'User created successfully');
+}
 
 
 
@@ -136,26 +137,28 @@ public function destroyAdmin($id)
     }
 
 //admin user CRUD
+// In your UserController.php
 public function storeAdmin(Request $request)
 {
+    // Validate the incoming data
     $validatedData = $request->validate([
         'name' => 'required|string|max:255',
         'email' => 'required|email|unique:users,email',
         'password' => 'required|confirmed|min:8',
     ]);
 
-    // Log the validated data for debugging
-    logger($validatedData);
-
+    // Create the new admin user directly without using an unnecessary variable
     User::create([
         'name' => $validatedData['name'],
         'email' => $validatedData['email'],
-        'password' => Hash::make($validatedData['password']),
-        'role' => 'admin', // Explicitly set the role to 'admin'
+        'password' => bcrypt($validatedData['password']), // Hash the password
+        'role' => 'admin', // Ensure the role is set to 'admin'
     ]);
 
-    return redirect()->route('admin_users.index')->with('success', 'Admin user added successfully.');
+    // Redirect to admin users index with a success message
+    return redirect()->route('admin_users.index')->with('success', 'Admin user added successfully!');
 }
+
 
 
 

@@ -14,6 +14,14 @@ class Book extends Model
         'author',
         'genre',
         'year',
-        'cover_image'
+        'cover_image',
+        'price',
+        'quantity',
+        'description',
+        'rating'
     ];
+    public function genre()
+    {
+        return $this->belongsTo(Genre::class);
+    }   
 }
