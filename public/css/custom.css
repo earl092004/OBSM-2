@@ -1,0 +1,162 @@
+.category-card {
+    height: 200px;
+    border-radius: 10px;
+    background-size: cover;
+    background-position: center;
+    position: relative;
+    overflow: hidden;
+}
+
+.category-overlay {
+    background: rgba(0, 0, 0, 0.5);
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+    width: 100%;
+}
+
+.card {
+    border-radius: 10px;
+    overflow: hidden;
+    transition: transform 0.3s, box-shadow 0.3s;
+}
+
+.card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+}
+
+.card-img-top {
+    height: 300px;
+    object-fit: cover;
+    border-bottom: 1px solid #ddd;
+}
+
+.btn-outline-primary {
+    border-radius: 20px;
+    font-weight: bold;
+}
+
+
+.category-card {
+    height: 200px;
+    border-radius: 10px;
+    position: relative;
+    overflow: hidden;
+    transition: transform 0.3s, box-shadow 0.3s;
+}
+
+.category-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+}
+
+.category-image {
+    height: 100%;
+    background-size: cover;
+    background-position: center;
+    filter: brightness(0.8);
+    transition: filter 0.3s;
+}
+
+.category-card:hover .category-image {
+    filter: brightness(0.5);
+}
+
+.category-overlay {
+    background: rgba(0, 0, 0, 0.6);
+    color: white;
+    text-align: center;
+    opacity: 0;
+    transition: opacity 0.3s;
+}
+
+.category-card:hover .category-overlay {
+    opacity: 1;
+}
+
+.stretched-link {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 1;
+}
+
+
+.hero {
+    background: url('https://as1.ftcdn.net/v2/jpg/05/58/73/12/1000_F_558731213_ilx4NZvbojGEMQDAfw5W2mcJjinZqf6V.jpg') no-repeat center center;
+    background-size: cover;
+    color: white;
+    height: 60vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-shadow: 1px 1px 4px rgba(0, 0, 0, 0.7);
+}
+
+.hero h1 {
+    font-size: 3rem;
+    font-weight: bold;
+}
+
+.footer {
+    background-color: #343a40;
+    color: white;
+}
+
+.footer a {
+    text-decoration: none;
+}
+
+.navbar-brand {
+    font-size: 1.5rem;
+    font-weight: bold;
+}
+
+.user-icon {
+width: 40px; /* Make the icon more round */
+height: 40px; /* Same as width for a perfect circle */
+background-color: #000000;
+color: white;
+text-align: center;
+border-radius: 50%;
+line-height: 40px; /* Centers the text vertically */
+font-weight: bold;
+font-size: 18px; /* Adjust text size if needed */
+display: inline-block; /* Ensure it doesn't stretch */
+}
+/* Cart Button Styles */
+.cart-btn {
+background-color: #f8c146;  /* Yellow background */
+color: #fff;
+padding: 10px 20px;
+border-radius: 50px;
+font-weight: bold;
+text-transform: uppercase;
+transition: all 0.3s ease;
+border: none;
+display: inline-flex;
+align-items: center;
+}
+
+.cart-btn i {
+margin-right: 8px;
+}
+
+/* Hover Effect */
+.cart-btn:hover {
+background-color: #f7b500;  /* Darker yellow */
+color: #fff;
+transform: scale(1.05);  /* Slight scale on hover */
+box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2); /* Add shadow for hover effect */
+}
+
+/* Focus effect */
+.cart-btn:focus {
+outline: none;
+box-shadow: 0 0 0 2px rgba(0, 123, 255, 0.5); /* Add a blue outline when focused */
+}
