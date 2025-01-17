@@ -13,13 +13,13 @@
     <!-- Categories Tabs -->
     <ul class="nav nav-pills mb-3 justify-content-center" id="pills-tab" role="tablist">
         <li class="nav-item" role="presentation">
-            <button class="nav-link active" id="worldwide-tab" data-bs-toggle="pill" data-bs-target="#worldwide" type="button" role="tab" aria-controls="worldwide" aria-selected="true">Top 10 Worldwide</button>
+            <button class="nav-link active" id="worldwide-tab" data-bs-toggle="pill" data-bs-target="#worldwide" type="button" role="tab" aria-controls="worldwide" aria-selected="true">Top 10 Rated</button>
         </li>
         <li class="nav-item" role="presentation">
-            <button class="nav-link" id="philippines-tab" data-bs-toggle="pill" data-bs-target="#philippines" type="button" role="tab" aria-controls="philippines" aria-selected="false">Top 10 in the Philippines</button>
+            <button class="nav-link" id="philippines-tab" data-bs-toggle="pill" data-bs-target="#philippines" type="button" role="tab" aria-controls="philippines" aria-selected="false">Top 11-20 Rated</button>
         </li>
         <li class="nav-item" role="presentation">
-            <button class="nav-link" id="spup-tab" data-bs-toggle="pill" data-bs-target="#spup" type="button" role="tab" aria-controls="spup" aria-selected="false">Top 10 in SPUP</button>
+            <button class="nav-link" id="spup-tab" data-bs-toggle="pill" data-bs-target="#spup" type="button" role="tab" aria-controls="spup" aria-selected="false">Top 21-50 Rated</button>
         </li>
     </ul>
 

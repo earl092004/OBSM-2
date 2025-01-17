@@ -4,118 +4,153 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Login</title>
-    <link rel="stylesheet" href="{{ asset('css/style.css') }}"> <!-- Add your CSS file here -->
+    <title>Login - Patch Bookstore</title>
+    <link rel="stylesheet" href="{{ asset('css/style.css') }}">
 
     <style>
         body {
             display: flex;
             justify-content: center;
             align-items: center;
-            height: 100vh;
+            min-height: 100vh;
             margin: 0;
-            background: #f5f5f5;
+            background: linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)),
+                        url('https://images.pexels.com/photos/159711/books-bookstore-book-reading-159711.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1') center/cover;
             font-family: Arial, sans-serif;
+            padding: 20px;
         }
 
         .login-container {
             width: 100%;
             max-width: 400px;
-            padding: 20px;
-            background: #fff;
-            border-radius: 8px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-            position: relative; /* Make sure the back button is positioned inside this container */
+            padding: 30px;
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 15px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+            position: relative;
         }
 
         .login-container h1 {
             text-align: center;
-            margin-bottom: 20px;
+            margin-bottom: 30px;
             color: #333;
+            font-size: 24px;
         }
 
         .form-group {
-            margin-bottom: 15px;
+            margin-bottom: 20px;
         }
 
         .form-group label {
             display: block;
-            margin-bottom: 5px;
+            margin-bottom: 8px;
             color: #555;
+            font-size: 14px;
         }
 
         .form-group input {
             width: 100%;
-            padding: 10px;
-            border: 1px solid #ddd;
-            border-radius: 4px;
+            padding: 12px;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            font-size: 16px;
+            transition: border-color 0.3s ease;
+        }
+
+        .form-group input:focus {
+            outline: none;
+            border-color: #007bff;
         }
 
         .form-group button {
             width: 100%;
-            padding: 10px;
-            background: #007bff;
+            padding: 14px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             color: #fff;
             border: none;
-            border-radius: 4px;
+            border-radius: 8px;
+            font-size: 16px;
             cursor: pointer;
+            transition: transform 0.3s ease;
         }
 
         .form-group button:hover {
-            background: #0056b3;
+            transform: translateY(-2px);
         }
 
         .error {
-            color: red;
-            margin-top: 5px;
+            color: #dc3545;
+            margin: 15px 0;
+            padding: 10px;
+            background: rgba(220, 53, 69, 0.1);
+            border-radius: 8px;
+        }
+
+        .error ul {
+            margin: 0;
+            padding-left: 20px;
         }
 
         .signup-link {
             text-align: center;
             margin-top: 20px;
+            color: #666;
         }
 
         .signup-link a {
-            color: #007bff;
+            color: #667eea;
             text-decoration: none;
+            font-weight: 500;
         }
 
         .signup-link a:hover {
             text-decoration: underline;
         }
 
-        /* Back Button Styles inside the login container */
         .back-button {
             position: absolute;
-            top: 10px;
-            left: 10px;
-            padding: 10px 15px;
-            background: #6c757d;
-            color: white;
+            top: -50px;
+            left: 0;
+            padding: 10px 20px;
+            background: rgba(255, 255, 255, 0.9);
+            color: #333;
             border: none;
-            border-radius: 4px;
+            border-radius: 8px;
             text-decoration: none;
-            text-align: center;
-            display: inline-block;
+            font-weight: 500;
+            transition: background 0.3s ease;
         }
 
         .back-button:hover {
-            background: #5a6268;
+            background: #fff;
         }
 
+        .alert {
+            padding: 12px;
+            margin-bottom: 20px;
+            border-radius: 8px;
+        }
+
+        .alert-success {
+            background: rgba(40, 167, 69, 0.1);
+            color: #28a745;
+        }
+
+        .alert-danger {
+            background: rgba(220, 53, 69, 0.1);
+            color: #dc3545;
+        }
     </style>
 </head>
 
 <body>
     <div class="login-container">
-        <!-- Back Button -->
         <a href="{{ route('user_homepage') }}" class="back-button">
-            Back
+            ← Back to Home
         </a>
 
-        <h1>Login</h1>
+        <h1>Welcome To Patch Bookstore</h1>
 
-        <!-- Validation Errors -->
         @if ($errors->any())
             <div class="error">
                 <ul>
@@ -126,7 +161,6 @@
             </div>
         @endif
 
-        <!-- Success/Error Message -->
         @if(session('success'))
             <div class="alert alert-success">{{ session('success') }}</div>
         @endif
@@ -138,23 +172,24 @@
         <form method="POST" action="{{ route('login') }}">
             @csrf
 
-            <div class="mb-3 form-group">
-                <label for="email" class="form-label">Email</label>
-                <input type="email" name="email" id="email" class="form-control" required autofocus aria-label="Email" aria-describedby="emailHelp">
+            <div class="form-group">
+                <label for="email">Email</label>
+                <input type="email" name="email" id="email" required autofocus value="{{ old('email') }}">
             </div>
 
-            <div class="mb-3 form-group">
-                <label for="password" class="form-label">Password</label>
-                <input type="password" name="password" id="password" class="form-control" required aria-label="Password">
+            <div class="form-group">
+                <label for="password">Password</label>
+                <input type="password" name="password" id="password" required>
             </div>
 
-            <button type="submit" class="btn btn-primary w-100">Login</button>
+            <div class="form-group">
+                <button type="submit">Login</button>
+            </div>
         </form>
 
         <div class="signup-link">
             <p>Don't have an account? <a href="{{ route('create-user') }}">Sign up here</a></p>
         </div>
-
     </div>
 
     <script src="{{ asset('js/app.js') }}"></script>

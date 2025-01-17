@@ -37,7 +37,11 @@
             <i class="fas fa-user-plus"></i> Add Admin User
         </button>
     </div>
-
+    @if(session('success'))
+    <div class="alert alert-success">
+        {{ session('success') }}
+    </div>
+@endif
     <!-- Add Admin Modal -->
 <div class="modal fade" id="addAdminModal" tabindex="-1" aria-labelledby="addAdminModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-lg">
@@ -69,9 +73,5 @@
         </div>
     </div>
 </div>
-@if(session('success'))
-    <div class="alert alert-success">
-        {{ session('success') }}
-    </div>
-@endif
+
 @endsection

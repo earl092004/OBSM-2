@@ -96,7 +96,7 @@ public function destroyAdmin($id)
         'password' => bcrypt($validatedData['password']),  // Hash the password before storing
     ]);
 
-    return redirect()->route('users.index')->with('success', 'User created successfully');
+    return redirect()->route('login')->with('success', 'User created successfully, please Login ');
 }
 
 

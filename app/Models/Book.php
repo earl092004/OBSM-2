@@ -20,8 +20,5 @@ class Book extends Model
         'description',
         'rating'
     ];
-    public function genre()
-    {
-        return $this->belongsTo(Genre::class);
-    }   
+
 }

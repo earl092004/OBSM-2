@@ -122,8 +122,18 @@ public function search(Request $request)
 }
 
 
-//BookController or UserController
-// In your BookController.php
+public function showBooksByGenre($genre = 'All Books')
+{
+    // If genre is 'All Books', get all books
+    if ($genre == 'All Books') {
+        $books = Book::all(); // Fetch all books
+    } else {
+        $books = Book::where('genre', $genre)->get(); // Fetch books for the selected genre
+    }
+
+    // Ensure 'genre' and 'books' are passed to the view
+    return view('user_list_of_books', compact('books', 'genre'));  // Pass books and genre to the view
+}
 
 
 }

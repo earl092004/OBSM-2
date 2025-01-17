@@ -20,7 +20,7 @@ Route::get('/best-sellers', function () {
 
 Route::get('/categories', function () {
     return view('categories');
-})->name('categories');
+})->name('genres');
 
 
 
@@ -169,3 +169,5 @@ Route::middleware('auth')->group(function () {
 
 
 
+// categories part
+Route::get('/genres/{genre}', [BookController::class, 'showBooksByGenre'])->name('books.genre');
