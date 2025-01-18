@@ -1,6 +1,8 @@
 <!DOCTYPE html>
 <html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
 <head>
+    <meta name="csrf-token" content="{{ csrf_token() }}">
+
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>@yield('title', 'PATCHBookstore')</title>
@@ -199,11 +201,14 @@
                         </a>
                     </li>
                     @endauth
-                    <li class="nav-item ms-2">
-                        <a class="cart-btn" href="#" data-bs-toggle="modal" data-bs-target="#cartModal">
-                            <i class="fas fa-shopping-cart me-1"></i> Cart
-                        </a>
-                    </li>
+                    <!-- Cart Button -->
+                        <li class="nav-item ms-2">
+                            <a class="cart-btn" href="#" data-bs-toggle="modal" data-bs-target="#cartModal">
+                                <i class="fas fa-shopping-cart me-1"></i> Cart
+
+                            </a>
+                        </li>
+
                 </ul>
             </div>
         </div>
@@ -260,56 +265,101 @@
     </footer>
 
     <!-- Cart Modal -->
-    <div class="modal fade" id="cartModal" tabindex="-1" aria-hidden="true">
+    <div class="modal fade" id="addToCartModal" tabindex="-1" aria-labelledby="addToCartModalLabel" aria-hidden="true">
         <div class="modal-dialog modal-lg">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title">
-                        <i class="fas fa-shopping-cart me-2"></i>Your Cart
-                    </h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                    <h5 class="modal-title" id="addToCartModalLabel">Add to Cart</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
-                    <ul class="list-group list-group-flush">
-                        <li class="list-group-item">
-                            <div class="d-flex justify-content-between align-items-center">
-                                <div>
-                                    <h6 class="mb-1">Book Title 1</h6>
-                                    <p class="text-muted mb-0">Author: Author Name</p>
-                                    <p class="text-primary mb-0">Price: $10.99</p>
-                                </div>
-                                <button class="btn btn-outline-danger btn-sm">
-                                    <i class="fas fa-trash-alt"></i>
-                                </button>
-                            </div>
-                        </li>
-                        <li class="list-group-item">
-                            <div class="d-flex justify-content-between align-items-center">
-                                <div>
-                                    <h6 class="mb-1">Book Title 2</h6>
-                                    <p class="text-muted mb-0">Author: Author Name</p>
-                                    <p class="text-primary mb-0">Price: $12.99</p>
-                                </div>
-                                <button class="btn btn-outline-danger btn-sm">
-                                    <i class="fas fa-trash-alt"></i>
-                                </button>
-                            </div>
-                        </li>
-                    </ul>
+                    <!-- Book Details Display -->
+                    <div id="book-details">
+                        <!-- Book info will be injected here -->
+                    </div>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
-                        <i class="fas fa-times me-1"></i>Close
-                    </button>
-                    <button type="button" class="btn btn-success">
-                        <i class="fas fa-check me-1"></i>Checkout
-                    </button>
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-primary" id="add-to-cart-btn">Add to Cart</button>
                 </div>
             </div>
         </div>
     </div>
 
+    <!-- Cart Modal -->
+    <!-- Cart Modal -->
+<!-- Cart Modal -->
+<div class="modal fade" id="cartModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">
+                    <i class="fas fa-shopping-cart me-2"></i>Your Cart
+                </h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                @if(isset($cartItems) && $cartItems->count() > 0)
+                    <ul class="list-group list-group-flush">
+                        @foreach ($cartItems as $item)
+    <li class="list-group-item" id="cart-item-{{ $item->book->id }}">
+        <div class="d-flex justify-content-between align-items-center">
+            <div>
+                <h6 class="mb-1">{{ $item->book->title }}</h6>
+                <p class="text-muted mb-0">Author: {{ $item->book->author }}</p>
+                <p class="text-primary mb-0">Price: PHP{{ number_format($item->book->price, 2) }}</p>
+            </div>
+            <form action="{{ route('removeFromCart', $item->book->id) }}" method="POST">
+                @csrf
+                @method('DELETE')
+                <button type="submit" class="btn btn-outline-danger btn-sm">
+                    <i class="fas fa-trash-alt"></i> Remove
+                </button>
+            </form>
+
+        </div>
+    </li>
+@endforeach
+                    </ul>
+                @else
+                    <p>No items in the cart.</p>
+                @endif
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                    <i class="fas fa-times me-1"></i>Close
+                </button>
+                <button type="button" class="btn btn-success" id="checkout-btn">
+                    <i class="fas fa-check me-1"></i>Checkout
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
     <!-- Bootstrap JS -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+    <script>
+        // Function to remove a cart item using AJAX
+        function addToCart(bookId) {
+    $.ajax({
+        url: '/add-to-cart/' + bookId,  // This should match the POST route for add-to-cart
+        type: 'POST',
+        data: {
+            _token: '{{ csrf_token() }}',  // Ensure CSRF token is sent with the request
+        },
+        success: function(response) {
+            // Successfully added to cart, handle response here
+            $('#cart-count').text(response.cartCount);  // Update cart count in the navbar
+
+            // Close the modal after adding the book to cart
+            $('#addToCartModal').modal('hide');
+        },
+        error: function(xhr, status, error) {
+            alert('Something went wrong. Please try again.');
+        }
+    });
+}
 </body>
 </html>

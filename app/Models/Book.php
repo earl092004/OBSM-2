@@ -20,5 +20,9 @@ class Book extends Model
         'description',
         'rating'
     ];
+    public function carts()
+    {
+        return $this->hasMany(Cart::class);
+    }
 
 }

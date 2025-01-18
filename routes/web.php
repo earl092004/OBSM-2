@@ -4,6 +4,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\BookController;
+use App\Http\Controllers\BlogController;
 use App\Http\Controllers\Auth\AuthenticatedSessionController;
 use App\Models\Genre;
 Route::get('/user_list_of_books', function () {
@@ -129,6 +130,7 @@ Route::get('/books/create', [BookController::class, 'create'])->name('books.crea
 
 // Store the new book in the database
 Route::post('/books', [BookController::class, 'store'])->name('books.store');
+Route::put('/books/{id}', [BookController::class, 'update'])->name('books.update');
 //search
 Route::get('/books/search', [BookController::class, 'search'])->name('books.search');
 // In your routes/web.php
@@ -171,3 +173,43 @@ Route::middleware('auth')->group(function () {
 
 // categories part
 Route::get('/genres/{genre}', [BookController::class, 'showBooksByGenre'])->name('books.genre');
+
+
+
+//add to cart
+Route::post('/cart/{bookId}', [BookController::class, 'addToCart'])->name('cart.add');
+Route::get('/cart', [BookController::class, 'cart'])->name('cart.view');
+Route::post('/checkout', [BookController::class, 'checkout'])->name('checkout');
+
+
+Route::post('/add-to-cart/{bookId}', [BookController::class, 'addToCart'])->name('cart.add');
+Route::delete('/cart/remove/{bookId}', [BookController::class, 'removeFromCart'])->name('cart.remove');
+
+
+Route::get('/user-homepage', [BookController::class, 'showFeaturedBooks'])->name('user_homepage');
+
+Route::get('/blog', [BlogController::class, 'index'])->name('blog');
+
+Route::get('/cart', [BookController::class, 'showCart'])->name('cart.show');
+Route::delete('/cart/{cartItemId}', [BookController::class, 'removeFromCart'])->name('cart.remove');
+Route::get('/cart/checkout', [BookController::class, 'checkout'])->name('cart.checkout');
+Route::get('/add-to-cart/{bookId}', [BookController::class, 'addToCart'])->name('books.addToCart');
+
+Route::delete('/cart/{bookId}', [BookController::class, 'removeFromCart'])->name('remove-from-cart');
+Route::get('/cart', [BookController::class, 'showCart'])->name('showCart');
+Route::delete('/cart/remove/{bookId}', [BookController::class, 'removeFromCart'])->name('remove-from-cart');
+
+
+// Route for adding a book to the cart
+Route::get('/add-to-cart/{bookId}', [BookController::class, 'addToCart'])->name('books.addToCart');
+Route::get('/cart', [BookController::class, 'showCart'])->name('cart.show');
+// Route to delete a cart item
+Route::delete('/cart/{cartItem}', [BookController::class, 'deleteCartItem'])->name('cart.delete');
+
+Route::get('/cart', [BookController::class, 'showCart'])->name('cart.show');
+Route::get('/user-layout', [BookController::class, 'showUserLayouts'])->name('user_homepage');
+Route::delete('/remove-from-cart/{bookId}', [BookController::class, 'removeFromCart'])->name('remove-from-cart');
+// Add to Cart Route
+Route::post('/add-to-cart/{bookId}', [BookController::class, 'addToCart'])->name('addToCart');
+Route::delete('/remove-from-cart/{bookId}', [BookController::class, 'removeFromCart'])->name('removeFromCart');
+
