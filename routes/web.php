@@ -231,3 +231,12 @@ Route::get('/cart', [BookController::class, 'showCart'])->name('cart');
 
 
 Route::get('/admin/dashboard', [BookController::class, 'getDashboardData'])->name('admin.dashboard');
+
+
+// web.php (routes file)
+Route::get('/export-transactions', [BookController::class, 'exportTransactions'])->name('transactions.export');
+
+
+// Route for viewing transactions
+Route::get('/user-transactions', [BookController::class, 'viewTransactions'])->name('transactions.view');
+Route::get('/transactions/download', [BookController::class, 'downloadCSV'])->name('transactions.downloadCSV');

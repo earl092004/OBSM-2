@@ -417,6 +417,95 @@ public function getDashboardData()
     return view('home', compact('totalUsersPurchased', 'totalIncome'));
 }
 
+
+public function exportTransactions()
+    {
+        // Get all transactions data
+        $transactions = TransactionHistory::all();
+
+        // Define the CSV file headers
+        $csvHeaders = ['User ID', 'Book ID', 'Price', 'Quantity', 'Total Amount'];
+
+        // Open a file pointer to create a CSV
+        $handle = fopen('php://output', 'w');
+
+        // Set the headers for the download
+        header('Content-Type: text/csv');
+        header('Content-Disposition: attachment; filename="transactions.csv"');
+
+        // Write the CSV headers to the file
+        fputcsv($handle, $csvHeaders);
+
+        // Write each transaction data to the file
+        foreach ($transactions as $transaction) {
+            fputcsv($handle, [
+                $transaction->user_id,
+                $transaction->book_id,
+                $transaction->price,
+                $transaction->quantity,
+                $transaction->total_amount,
+            ]);
+        }
+
+        // Close the file pointer
+        fclose($handle);
+
+        // Exit to prevent any further output
+        exit;
+    }
+
+    public function showTransactions()
+{
+    $transactions = TransactionHistory::all();
+    return view('userTransactions', compact('transactions'));
+}
+
+
+public function viewTransactions()
+{
+    // Get all transaction histories
+    $transactions = TransactionHistory::all();
+
+    // Pass the transactions data to the view
+    return view('userTransactions', compact('transactions'));
+}
+
+public function downloadCSV()
+{
+    // Fetch all transactions
+    $transactions = TransactionHistory::all();
+
+    // Open memory for writing the CSV file
+    $csvData = fopen('php://output', 'w');
+
+    // Set the headers for CSV file download
+    header('Content-Type: text/csv');
+    header('Content-Disposition: attachment; filename="transactions.csv"');
+
+    // Add CSV headers
+    fputcsv($csvData, ['User ID', 'Book ID', 'Price', 'Quantity', 'Total Amount']);
+
+    // Add transaction data rows
+    foreach ($transactions as $transaction) {
+        fputcsv($csvData, [
+            $transaction->user_id,
+            $transaction->book_id,
+            $transaction->price,
+            $transaction->quantity,
+            $transaction->total_amount,
+        ]);
+    }
+
+    // Close the CSV file after writing
+    fclose($csvData);
+
+    // Return a response that triggers the file download
+    exit();
+}
+
+
+
+
 }
 
 

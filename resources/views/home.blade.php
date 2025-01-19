@@ -201,7 +201,7 @@
                                 <div class="stat-label">Users Purchased</div>
                             </div>
                         </div>
-                        <a href="#" class="btn dashboard-btn btn-income">
+                        <a href="{{ route('transactions.view') }}" class="btn dashboard-btn btn-income">
                             <i class="fas fa-arrow-right me-2"></i>View Transactions
                         </a>
                     </div>
