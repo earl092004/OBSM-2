@@ -14,7 +14,8 @@
     <!-- Custom CSS -->
     <link rel="stylesheet" href="{{ asset('css/custom.css') }}">
 
-    <style>
+<style>
+
         /* Navbar Styling */
         .navbar {
             padding: 0.5rem 1rem;
@@ -153,6 +154,29 @@
     </style>
 </head>
 <body>
+
+
+<!-- Notification Container (Positioned fixed at the top of the screen) -->
+<div id="notification-container" class="position-fixed top-0 start-50 translate-middle-x p-3 w-50 z-index-100">
+    <!-- Success message -->
+    @if(session('success'))
+        <div id="success-message" class="alert alert-success alert-dismissible fade show" role="alert">
+            <strong>{{ session('success') }}</strong>
+        </div>
+    @endif
+
+    <!-- Error message -->
+    @if(session('error'))
+        <div id="error-message" class="alert alert-danger alert-dismissible fade show" role="alert">
+            <strong>{{ session('error') }}</strong>
+        </div>
+    @endif
+</div>
+
+
+
+
+
     <!-- Navigation Bar -->
     <nav class="navbar navbar-expand-lg navbar-dark shadow sticky-top">
         <div class="container">
@@ -289,6 +313,7 @@
     <!-- Cart Modal -->
     <!-- Cart Modal -->
 <!-- Cart Modal -->
+<!-- Cart Modal -->
 <div class="modal fade" id="cartModal" tabindex="-1" aria-labelledby="cartModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-lg">
         <div class="modal-content">
@@ -324,46 +349,55 @@
                     <p>No items in the cart.</p>
                 @endif
             </div>
-            <!-- In your cart modal -->
-<!-- In the cart modal -->
-<!-- In the cart modal -->
-<div class="modal-footer">
-    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-    <form action="{{ route('checkout') }}" method="POST">
-        @csrf
-        <button type="submit" class="btn btn-success">
-            <i class="fas fa-check me-1"></i> Checkout
-        </button>
-    </form>
-</div>
-
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                <!-- Checkout Form -->
+                <form action="{{ route('checkout') }}" method="POST">
+                    @csrf
+                    <button type="submit" class="btn btn-success">
+                        <i class="fas fa-check me-1"></i> Checkout
+                    </button>
+                </form>
+            </div>
         </div>
     </div>
 </div>
+
 
     <!-- Bootstrap JS -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 
     <script>
-        // Function to remove a cart item using AJAX
-        function addToCart(bookId) {
-    $.ajax({
-        url: '/add-to-cart/' + bookId,  // This should match the POST route for add-to-cart
-        type: 'POST',
-        data: {
-            _token: '{{ csrf_token() }}',  // Ensure CSRF token is sent with the request
-        },
-        success: function(response) {
-            // Successfully added to cart, handle response here
-            $('#cart-count').text(response.cartCount);  // Update cart count in the navbar
+        // Function to show success or error message as a popup
+       // Function to show success or error message as a popup
+function showMessage(type, message) {
+    var successMessage = document.getElementById("success-message");
+    var errorMessage = document.getElementById("error-message");
 
-            // Close the modal after adding the book to cart
-            $('#addToCartModal').modal('hide');
-        },
-        error: function(xhr, status, error) {
-            alert('Something went wrong. Please try again.');
-        }
-    });
+    // Show the correct message type
+    if (type === "success") {
+        successMessage.textContent = message; // Set message
+        successMessage.classList.remove("d-none"); // Show the message
+        setTimeout(function() {
+            successMessage.classList.add("d-none"); // Hide the message after 5 seconds
+        }, 5000); // 5 seconds
+    } else if (type === "error") {
+        errorMessage.textContent = message; // Set message
+        errorMessage.classList.remove("d-none"); // Show the message
+        setTimeout(function() {
+            errorMessage.classList.add("d-none"); // Hide the message after 5 seconds
+        }, 5000); // 5 seconds
+    }
 }
+
+// Check for session messages and show corresponding popup
+@if(session('success'))
+    showMessage('success', '{{ session('success') }}');
+@elseif(session('error'))
+    showMessage('error', '{{ session('error') }}');
+@endif
+
+    </script>
+
 </body>
 </html>

@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use League\Csv\Reader;
 use App\Models\TransactionHistory;
 
+
 // use App\Models\TransactionHistory;
 // use App\Models\User;
 // use Illuminate\Support\Facades\Mail;
@@ -346,7 +347,6 @@ public function show($id)
 
 
 
-
 public function checkout()
 {
     // Get the authenticated user
@@ -355,46 +355,52 @@ public function checkout()
     // Fetch the user's cart items
     $cartItems = Cart::where('user_id', $user->id)->get();
 
-    // Debug: Check if cart items are being fetched properly
-    Log::info('Cart items:', $cartItems->toArray());
+    // Log cart items for debugging
+    Log::info('Cart items before checkout:', $cartItems->toArray());
 
     // Begin a database transaction
-    DB::beginTransaction(); // Start transaction
+    DB::beginTransaction();
 
-try {
-    // Loop through each cart item and create a transaction record
-    foreach ($cartItems as $item) {
-        TransactionHistory::create([
-            'user_id' => $user->id,
-            'book_id' => $item->book->id,
-            'price' => $item->book->price,
-            'quantity' => $item->quantity,
-        ]);
+    try {
+        $totalAmount = 0;  // Variable to store the total amount
+
+        // Loop through each cart item and create a transaction record
+        foreach ($cartItems as $item) {
+            // Calculate the total price
+            $totalAmount += $item->book->price * $item->quantity;
+
+            // Create a new transaction for each cart item
+            TransactionHistory::create([
+                'user_id' => $user->id,
+                'book_id' => $item->book->id,
+                'price' => $item->book->price,
+                'quantity' => $item->quantity,
+                'total_amount' => $totalAmount, // Add the total_amount field here
+            ]);
+        }
+
+        // Commit the transaction
+        DB::commit();
+
+        // Delete the cart items after successful transaction
+        Cart::where('user_id', $user->id)->delete();
+
+        // Redirect with success message
+        return back()->with('success', 'Thank you for your purchase!');
+
+    } catch (\Exception $e) {
+        // Rollback transaction in case of any error
+        DB::rollback();
+
+        // Log the error message
+        Log::error('Error during checkout: ' . $e->getMessage());
+
+        // Redirect with error message
+        return back()->with('error', 'There was an error during checkout. Please try again.');
     }
-
-    // Commit transaction
-    DB::commit();
-
-    // Delete cart items after successful transaction
-    Cart::where('user_id', $user->id)->delete();
-
-    return back()->with('success', 'Thank you for your purchase!');  // Success response
-} catch (\Exception $e) {
-    // Rollback transaction in case of any error
-    DB::rollback();
-
-    // Log the error message
-    Log::error('Error during checkout: ' . $e->getMessage());
-
-    return back()->with('error', 'There was an error during checkout. Please try again.');
 }
 
 
-
-
-
-
-}
 }
 
 
