@@ -165,15 +165,45 @@
         </div>
     @endif
 
-    <!-- Error message -->
-    @if(session('error'))
+    <!-- Error message (for cart being empty) -->
+    @if(session('error') && session('error') != 'Your cart is empty. Please add items to the cart before proceeding to checkout.')
         <div id="error-message" class="alert alert-danger alert-dismissible fade show" role="alert">
+            <strong>{{ session('error') }}</strong>
+        </div>
+    @endif
+
+    <!-- Error message for empty cart -->
+    @if(session('error') == 'Your cart is empty. Please add items to the cart before proceeding to checkout.')
+        <div class="alert alert-danger alert-dismissible fade show" role="alert">
             <strong>{{ session('error') }}</strong>
         </div>
     @endif
 </div>
 
+<!-- Modal for Success/Error (Checkout) -->
+<div class="modal fade" id="checkoutModal" tabindex="-1" aria-labelledby="checkoutModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="checkoutModalLabel">Checkout Status</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                @if(session('success'))
+                    <p>{{ session('success') }}</p>
+                @elseif(session('error'))
+                    <p>{{ session('error') }}</p>
+                @endif
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                <a href="{{ route('user_homepage') }}" class="btn btn-primary">Go to Homepage</a>
+            </div>
+        </div>
+    </div>
+</div>
 
+<!-- Cart is Empty Message -->
 
 
 
@@ -391,10 +421,11 @@ function showMessage(type, message) {
 }
 
 // Check for session messages and show corresponding popup
-@if(session('success'))
-    showMessage('success', '{{ session('success') }}');
-@elseif(session('error'))
-    showMessage('error', '{{ session('error') }}');
+@if(session('success') || session('error'))
+    var myModal = new bootstrap.Modal(document.getElementById('checkoutModal'), {
+        keyboard: false
+    });
+    myModal.show();
 @endif
 
     </script>

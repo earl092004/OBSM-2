@@ -2,6 +2,7 @@
 
 @section('content')
 <style>
+    /* Existing styles remain the same */
     .dashboard-container {
         padding: 2rem 0;
     }
@@ -44,6 +45,9 @@
     }
     .books-header {
         background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
+    }
+    .income-header {
+        background: linear-gradient(135deg, #ec4899 0%, #be185d 100%);
     }
     .dashboard-card .card-body {
         padding: 2rem;
@@ -88,10 +92,35 @@
         background: #d97706;
         color: white;
     }
+    .btn-income {
+        background: #ec4899;
+        color: white;
+    }
+    .btn-income:hover {
+        background: #be185d;
+        color: white;
+    }
     .dashboard-icon {
         font-size: 2.5rem;
         margin-bottom: 1rem;
         opacity: 0.9;
+    }
+    .stats-container {
+        display: flex;
+        justify-content: space-around;
+        margin-bottom: 1.5rem;
+    }
+    .stat-item {
+        text-align: center;
+    }
+    .stat-value {
+        font-size: 1.5rem;
+        font-weight: bold;
+        color: #374151;
+    }
+    .stat-label {
+        font-size: 0.875rem;
+        color: #6b7280;
     }
 </style>
 
@@ -102,7 +131,8 @@
         </div>
 
         <div class="row g-4">
-            <div class="col-md-4">
+            <!-- Existing cards -->
+            <div class="col-md-3">
                 <div class="card dashboard-card">
                     <div class="card-header-custom users-header text-white text-center">
                         <i class="fas fa-users dashboard-icon"></i>
@@ -117,7 +147,7 @@
                 </div>
             </div>
 
-            <div class="col-md-4">
+            <div class="col-md-3">
                 <div class="card dashboard-card">
                     <div class="card-header-custom admin-header text-white text-center">
                         <i class="fas fa-user-shield dashboard-icon"></i>
@@ -132,7 +162,7 @@
                 </div>
             </div>
 
-            <div class="col-md-4">
+            <div class="col-md-3">
                 <div class="card dashboard-card">
                     <div class="card-header-custom books-header text-white text-center">
                         <i class="fas fa-book dashboard-icon"></i>
@@ -146,6 +176,38 @@
                     </div>
                 </div>
             </div>
+
+            <!-- New Income & Stock Card -->
+            <div class="col-md-3">
+                <div class="card dashboard-card">
+                    <div class="card-header-custom income-header text-white text-center">
+                        <i class="fas fa-chart-line dashboard-icon"></i>
+                        <div>Income & Purchases</div>
+                    </div>
+                    <div class="card-body text-center">
+                        @php
+                            // Calculate total income by summing the total_amount column in the transaction_histories table
+                            $totalIncome = \App\Models\TransactionHistory::sum('total_amount');
+                            // Get the total number of unique users who have purchased
+                            $totalUsersPurchased = \App\Models\TransactionHistory::distinct('user_id')->count('user_id');
+                        @endphp
+                        <div class="stats-container">
+                            <div class="stat-item">
+                                <div class="stat-value">₱{{ number_format($totalIncome, 2) }}</div>
+                                <div class="stat-label">Total Income</div>
+                            </div>
+                            <div class="stat-item">
+                                <div class="stat-value">{{ $totalUsersPurchased }}</div>
+                                <div class="stat-label">Users Purchased</div>
+                            </div>
+                        </div>
+                        <a href="#" class="btn dashboard-btn btn-income">
+                            <i class="fas fa-arrow-right me-2"></i>View Transactions
+                        </a>
+                    </div>
+                </div>
+            </div>
+
         </div>
     </div>
 </div>

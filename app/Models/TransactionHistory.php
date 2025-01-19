@@ -9,7 +9,7 @@ class TransactionHistory extends Model
 {
     use HasFactory;
     protected $table = 'transaction_histories'; // Explicitly define table name if needed
-    protected $fillable = ['user_id', 'book_id', 'price', 'quantity'];
+    protected $fillable = ['user_id', 'book_id', 'price', 'quantity', 'total_amount'];
 
     // Define the relationship with the User model
     public function user()

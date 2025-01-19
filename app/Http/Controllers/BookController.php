@@ -355,6 +355,11 @@ public function checkout()
     // Fetch the user's cart items
     $cartItems = Cart::where('user_id', $user->id)->get();
 
+    if ($cartItems->isEmpty()) {
+        // If the cart is empty, return an error
+        return back()->with('error', 'Your cart is empty. Please add items to the cart before proceeding to checkout.');
+    }
+
     // Log cart items for debugging
     Log::info('Cart items before checkout:', $cartItems->toArray());
 
@@ -362,20 +367,20 @@ public function checkout()
     DB::beginTransaction();
 
     try {
-        $totalAmount = 0;  // Variable to store the total amount
+        $totalAmount = 0;  // Initialize the total amount
 
         // Loop through each cart item and create a transaction record
         foreach ($cartItems as $item) {
-            // Calculate the total price
+            // Calculate the total price for each item
             $totalAmount += $item->book->price * $item->quantity;
 
-            // Create a new transaction for each cart item
+            // Create a transaction history record for each cart item
             TransactionHistory::create([
                 'user_id' => $user->id,
                 'book_id' => $item->book->id,
                 'price' => $item->book->price,
                 'quantity' => $item->quantity,
-                'total_amount' => $totalAmount, // Add the total_amount field here
+                'total_amount' => $item->book->price * $item->quantity, // Calculate and save the total amount for each item
             ]);
         }
 
@@ -385,9 +390,8 @@ public function checkout()
         // Delete the cart items after successful transaction
         Cart::where('user_id', $user->id)->delete();
 
-        // Redirect with success message
-        return back()->with('success', 'Thank you for your purchase!');
-
+        // Return a success message
+        return back()->with('success', 'Thank you for your purchase! Your order has been successfully placed.');
     } catch (\Exception $e) {
         // Rollback transaction in case of any error
         DB::rollback();
@@ -395,11 +399,23 @@ public function checkout()
         // Log the error message
         Log::error('Error during checkout: ' . $e->getMessage());
 
-        // Redirect with error message
         return back()->with('error', 'There was an error during checkout. Please try again.');
     }
 }
 
+
+public function getDashboardData()
+{
+    $totalUsersPurchased = TransactionHistory::distinct('user_id')->count('user_id');
+    $totalIncome = TransactionHistory::sum('total_amount');
+
+    // Debugging: Log or dump the values
+    Log::info('Total Income: ' . $totalIncome);
+    Log::info('Total Users Purchased: ' . $totalUsersPurchased);
+
+    // Return the data to the view
+    return view('home', compact('totalUsersPurchased', 'totalIncome'));
+}
 
 }
 

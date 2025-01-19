@@ -227,3 +227,7 @@ Route::post('/addToCart/{bookId}', [BookController::class, 'addToCart'])->name('
 //checkout na!!
 Route::post('/checkout', [BookController::class, 'checkout'])->name('checkout');
 Route::get('/cart', [BookController::class, 'showCart'])->name('cart');
+
+
+
+Route::get('/admin/dashboard', [BookController::class, 'getDashboardData'])->name('admin.dashboard');
