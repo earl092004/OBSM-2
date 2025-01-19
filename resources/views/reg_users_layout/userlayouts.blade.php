@@ -289,7 +289,7 @@
     <!-- Cart Modal -->
     <!-- Cart Modal -->
 <!-- Cart Modal -->
-<div class="modal fade" id="cartModal" tabindex="-1" aria-hidden="true">
+<div class="modal fade" id="cartModal" tabindex="-1" aria-labelledby="cartModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-lg">
         <div class="modal-content">
             <div class="modal-header">
@@ -302,37 +302,41 @@
                 @if(isset($cartItems) && $cartItems->count() > 0)
                     <ul class="list-group list-group-flush">
                         @foreach ($cartItems as $item)
-    <li class="list-group-item" id="cart-item-{{ $item->book->id }}">
-        <div class="d-flex justify-content-between align-items-center">
-            <div>
-                <h6 class="mb-1">{{ $item->book->title }}</h6>
-                <p class="text-muted mb-0">Author: {{ $item->book->author }}</p>
-                <p class="text-primary mb-0">Price: PHP{{ number_format($item->book->price, 2) }}</p>
-            </div>
-            <form action="{{ route('removeFromCart', $item->book->id) }}" method="POST">
-                @csrf
-                @method('DELETE')
-                <button type="submit" class="btn btn-outline-danger btn-sm">
-                    <i class="fas fa-trash-alt"></i> Remove
-                </button>
-            </form>
-
-        </div>
-    </li>
-@endforeach
+                            <li class="list-group-item" id="cart-item-{{ $item->book->id }}">
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <div>
+                                        <h6 class="mb-1">{{ $item->book->title }}</h6>
+                                        <p class="text-muted mb-0">Author: {{ $item->book->author }}</p>
+                                        <p class="text-primary mb-0">Price: PHP{{ number_format($item->book->price, 2) }}</p>
+                                    </div>
+                                    <form action="{{ route('removeFromCart', $item->book->id) }}" method="POST">
+                                        @csrf
+                                        @method('DELETE')
+                                        <button type="submit" class="btn btn-outline-danger btn-sm">
+                                            <i class="fas fa-trash-alt"></i> Remove
+                                        </button>
+                                    </form>
+                                </div>
+                            </li>
+                        @endforeach
                     </ul>
                 @else
                     <p>No items in the cart.</p>
                 @endif
             </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
-                    <i class="fas fa-times me-1"></i>Close
-                </button>
-                <button type="button" class="btn btn-success" id="checkout-btn">
-                    <i class="fas fa-check me-1"></i>Checkout
-                </button>
-            </div>
+            <!-- In your cart modal -->
+<!-- In the cart modal -->
+<!-- In the cart modal -->
+<div class="modal-footer">
+    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+    <form action="{{ route('checkout') }}" method="POST">
+        @csrf
+        <button type="submit" class="btn btn-success">
+            <i class="fas fa-check me-1"></i> Checkout
+        </button>
+    </form>
+</div>
+
         </div>
     </div>
 </div>

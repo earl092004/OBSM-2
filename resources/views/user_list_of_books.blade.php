@@ -20,10 +20,9 @@
                 <h6 class="card-title mb-1 text-truncate">{{ $book->title }}</h6>
                 <p class="card-text text-muted small mb-1">{{ $book->author }}</p>
                 <p class="card-text fw-bold mb-2" style="font-size: 0.9rem;">PHP{{ number_format($book->price, 2) }}</p>
-                <form action="{{ route('addToCart', $book->id) }}" method="POST">
-                    @csrf
-                    <button type="submit" class="btn btn-primary">Add to Cart</button>
-                </form>
+                <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#bookModal{{ $book->id }}">
+                    Add to Cart
+                </button>
             </div>
         </div>
 
@@ -40,9 +39,10 @@
                             <div class="col-md-4">
                                 <img src="{{ $book->cover_image }}" class="img-fluid rounded shadow-sm mb-3" alt="{{ $book->title }}" style="width: 100%; object-fit: cover;">
                                 <div class="d-grid gap-2">
-                                    <button type="button" class="btn btn-primary" onclick="window.location='{{ route('books.addToCart', $book->id) }}'">
-                                        Add to Cart
-                                    </button>
+                                    <form action="{{ route('addToCart', $book->id) }}" method="POST">
+                                        @csrf
+                                        <button type="submit" class="btn btn-primary">Add to Cart</button>
+                                    </form>
 
                                     <p class="text-center fw-bold fs-5 mt-2 mb-0">PHP{{ number_format($book->price, 2) }}</p>
                                 </div>
@@ -66,6 +66,18 @@
             </div>
         </div>
     </div>
+    @if(session('success'))
+    <div class="alert alert-success">
+        {{ session('success') }}
+    </div>
+@endif
+
+@if(session('error'))
+    <div class="alert alert-danger">
+        {{ session('error') }}
+    </div>
+@endif
+
 @endforeach
     </div>
 </div>

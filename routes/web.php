@@ -179,7 +179,7 @@ Route::get('/genres/{genre}', [BookController::class, 'showBooksByGenre'])->name
 //add to cart
 Route::post('/cart/{bookId}', [BookController::class, 'addToCart'])->name('cart.add');
 Route::get('/cart', [BookController::class, 'cart'])->name('cart.view');
-Route::post('/checkout', [BookController::class, 'checkout'])->name('checkout');
+
 
 
 Route::post('/add-to-cart/{bookId}', [BookController::class, 'addToCart'])->name('cart.add');
@@ -213,3 +213,17 @@ Route::delete('/remove-from-cart/{bookId}', [BookController::class, 'removeFromC
 Route::post('/add-to-cart/{bookId}', [BookController::class, 'addToCart'])->name('addToCart');
 Route::delete('/remove-from-cart/{bookId}', [BookController::class, 'removeFromCart'])->name('removeFromCart');
 
+
+
+//best sellers
+
+Route::get('/best-sellers', [BookController::class, 'showBestSellers'])->name('bestSellers');
+Route::get('/books/{id}', [BookController::class, 'show'])->name('books.show');
+
+
+Route::post('/addToCart/{bookId}', [BookController::class, 'addToCart'])->name('addToCart');
+
+
+//checkout na!!
+Route::post('/checkout', [BookController::class, 'checkout'])->name('checkout');
+Route::get('/cart', [BookController::class, 'showCart'])->name('cart');

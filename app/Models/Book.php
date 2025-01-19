@@ -20,9 +20,17 @@ class Book extends Model
         'description',
         'rating'
     ];
+    // Relationship with Cart (A book can be added to many carts)
     public function carts()
     {
         return $this->hasMany(Cart::class);
     }
+
+    // Relationship with TransactionHistory (A book can be purchased many times)
+    public function transactionHistory()
+    {
+        return $this->hasMany(TransactionHistory::class);
+    }
+
 
 }

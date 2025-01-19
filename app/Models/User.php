@@ -26,8 +26,16 @@ class User extends Authenticatable
     }
 
     public function carts()
-{
-    return $this->hasMany(Cart::class);
-}
+    {
+        return $this->hasMany(Cart::class);
+    }
+
+    // Relationship with TransactionHistory (A user can have many transactions)
+    public function transactionHistory()
+    {
+        return $this->hasMany(TransactionHistory::class);
+    }
+
+
 
 }

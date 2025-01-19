@@ -5,10 +5,16 @@ use Illuminate\Support\Facades\Auth;
 use App\Models\Book;
 use Illuminate\Http\Request;
 use League\Csv\Reader;
+use App\Models\TransactionHistory;
+
 // use App\Models\TransactionHistory;
 // use App\Models\User;
 // use Illuminate\Support\Facades\Mail;
 // use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Log;
+
+use Illuminate\Support\Facades\DB;
+
 use App\Models\Cart;
 class BookController extends Controller
 {
@@ -148,6 +154,9 @@ public function search(Request $request)
 
 public function showBooksByGenre($genre = 'All Books')
 {
+    // Get cart items for the authenticated user
+    $cartItems = Cart::with('book')->where('user_id', auth::id())->get();
+
     // If genre is 'All Books', get all books
     if ($genre == 'All Books') {
         $books = Book::all(); // Fetch all books
@@ -155,8 +164,8 @@ public function showBooksByGenre($genre = 'All Books')
         $books = Book::where('genre', $genre)->get(); // Fetch books for the selected genre
     }
 
-    // Ensure 'genre' and 'books' are passed to the view
-    return view('user_list_of_books', compact('books', 'genre'));  // Pass books and genre to the view
+    // Pass both the cart items and books to the view
+    return view('user_list_of_books', compact('books', 'genre', 'cartItems'));  // Pass books, genre, and cartItems to the view
 }
 
 
@@ -190,9 +199,10 @@ public function addToCart($bookId)
         ]);
     }
 
-    // Close the modal (using JavaScript)
-    return back(); // This will return to the current page (no redirection)
+    // Redirect or return back to the page
+    return back(); // This will return to the previous page
 }
+
 
 
 public function update(Request $request, $id)
@@ -250,11 +260,9 @@ public function removeFromCart($bookId)
 // Fetch cart items for the authenticated user
 public function showCart()
 {
-    $cartItems = Cart::with('book')->where('user_id', Auth::id())->get();
-    return view('userlayouts', compact('cartItems')); // Pass cart items to the view
+    $cartItems = Cart::with('book')->where('user_id', auth::id())->get();
+    return view('cart', compact('cartItems')); // Assuming you have a 'cart.blade.php' view
 }
-
-
 // public function showCart()
 // {
 //     // Retrieve cart items for the logged-in user
@@ -269,14 +277,23 @@ public function cart()
 {
     return view('cart');
 }
-// In your controller
+
+
 public function showUserLayouts()
 {
+    // Fetch the cart items for the authenticated user
     $cartItems = Cart::with('book')->where('user_id', auth::id())->get();
 
-    // Return userlayouts view with cart items
-    return view('userlayouts', compact('cartItems'));
+    // Pass the cart items to the userlayouts view
+    return view('user_homepage', compact('cartItems'));
 }
+// public function showUserLayouts()
+// {
+//     $cartItems = Cart::with('book')->where('user_id', auth::id())->get();
+
+//     // Return userlayouts view with cart items
+//     return view('userlayouts', compact('cartItems'));
+// }
 
 public function deleteCartItem($cartItemId)
 {
@@ -302,6 +319,82 @@ public function showFeaturedBooks()
 
 
 
+// BookController.php
+
+public function showBestSellers()
+{
+    // Fetch cart items for the authenticated user
+    $cartItems = Cart::with('book')->where('user_id', auth::id())->get();
+
+    // Fetch best sellers data
+    $topRated = Book::where('rating', '>=', 4.5)->orderBy('rating', 'desc')->take(20)->get();
+    $rated21to40 = Book::where('rating', '>=', 4.0)->where('rating', '<', 4.5)->orderBy('rating', 'desc')->take(20)->get();
+    $rated41to60 = Book::where('rating', '>=', 3.5)->where('rating', '<', 4.0)->orderBy('rating', 'desc')->take(20)->get();
+
+    // Pass both the cart items and books to the view
+    return view('best_sellers', compact('topRated', 'rated21to40', 'rated41to60', 'cartItems'));
+}
+
+
+public function show($id)
+{
+    // Fetch the book by ID
+    $book = Book::findOrFail($id);  // If the book isn't found, it will throw a 404 error
+
+    return view('books.show', compact('book'));  // Pass the book to the view
+}
+
+
+
+
+public function checkout()
+{
+    // Get the authenticated user
+    $user = auth::user();
+
+    // Fetch the user's cart items
+    $cartItems = Cart::where('user_id', $user->id)->get();
+
+    // Debug: Check if cart items are being fetched properly
+    Log::info('Cart items:', $cartItems->toArray());
+
+    // Begin a database transaction
+    DB::beginTransaction(); // Start transaction
+
+try {
+    // Loop through each cart item and create a transaction record
+    foreach ($cartItems as $item) {
+        TransactionHistory::create([
+            'user_id' => $user->id,
+            'book_id' => $item->book->id,
+            'price' => $item->book->price,
+            'quantity' => $item->quantity,
+        ]);
+    }
+
+    // Commit transaction
+    DB::commit();
+
+    // Delete cart items after successful transaction
+    Cart::where('user_id', $user->id)->delete();
+
+    return back()->with('success', 'Thank you for your purchase!');  // Success response
+} catch (\Exception $e) {
+    // Rollback transaction in case of any error
+    DB::rollback();
+
+    // Log the error message
+    Log::error('Error during checkout: ' . $e->getMessage());
+
+    return back()->with('error', 'There was an error during checkout. Please try again.');
+}
+
+
+
+
+
+
+}
 }
 
 
@@ -346,4 +439,3 @@ public function showFeaturedBooks()
 //     session()->forget('cart');
 
 //     return redirect()->route('books.index')->with('success', 'Thank you for your purchase! You will receive an email with the order details.');
-// }

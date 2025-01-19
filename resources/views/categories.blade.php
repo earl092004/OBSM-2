@@ -25,6 +25,17 @@
                 'Sci-fi' => 'https://logos-world.net/wp-content/uploads/2023/04/Sci-Fi-Channel-Logo-1992.png'
             ];
         @endphp
+@if(session('success'))
+<div class="alert alert-success">
+    {{ session('success') }}
+</div>
+@endif
+
+@if(session('error'))
+<div class="alert alert-danger">
+    {{ session('error') }}
+</div>
+@endif
 
         @foreach (['Action', 'Drama', 'Non-fiction', 'Comedy', 'Thriller', 'Fantasy', 'Romance', 'Sci-fi'] as $genre)
         <div class="col-md-3 mb-4">
