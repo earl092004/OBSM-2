@@ -71,6 +71,8 @@
     </style>
 </head>
 <body>
+    @if (!request()->routeIs('create-user'))
+
     <nav class="navbar navbar-expand-md navbar-dark">
         <div class="container-fluid">
             <a class="navbar-brand" href="{{ route('home') }}">
@@ -85,12 +87,13 @@
                         <a class="nav-link {{ request()->routeIs('home') ? 'active' : '' }}" href="{{ route('home') }}">Home</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="/">Users</a>
+                        <a class="nav-link" href="{{ route('users.index') }}">Users</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="/">Profiles</a>
+                        <a class="nav-link" href="{{ route('admin_users.index') }}">Admins</a>
                     </li>
                 </ul>
+                @endif
                 @if (!request()->routeIs('create-user'))
                     <form action="{{ route('logout') }}" method="POST" id="logout-form" class="d-flex">
                         @csrf

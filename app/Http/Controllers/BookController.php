@@ -27,6 +27,8 @@ class BookController extends Controller
 
         // Return the books to the view
         return view('books.index', compact('books'));
+
+
     }
 
   // BookController.php
@@ -207,39 +209,39 @@ public function addToCart($bookId)
 
 
 public function update(Request $request, $id)
-    {
-        // Find the book by its ID
-        $book = Book::findOrFail($id);
+{
+    // Find the book by its ID
+    $book = Book::findOrFail($id);
 
-        // Validate the input data
-        $request->validate([
-            'title' => 'required|string|max:255',
-            'author' => 'required|string|max:255',
-            'genre' => 'required|string|max:255',
-            'year' => 'required|integer',
-            'cover_image' => 'required|url',
-            'price' => 'required|numeric',
-            'quantity' => 'required|integer',
-            'description' => 'required|string|max:500',
-            'rating' => 'required|numeric|min:1|max:5',
-        ]);
+    // Validate the input data
+    $request->validate([
+        'title' => 'required|string|max:255',
+        'author' => 'required|string|max:255',
+        'genre' => 'required|string|max:255',
+        'year' => 'required|integer',
+        'cover_image' => 'required|url',
+        'price' => 'required|numeric',
+        'quantity' => 'required|integer',
+        'description' => 'required|string|max:500',
+        'rating' => 'required|numeric|min:1|max:5',
+    ]);
 
-        // Update the book with the new data
-        $book->update([
-            'title' => $request->title,
-            'author' => $request->author,
-            'genre' => $request->genre,
-            'year' => $request->year,
-            'cover_image' => $request->cover_image,
-            'price' => $request->price,
-            'quantity' => $request->quantity,
-            'description' => $request->description,
-            'rating' => $request->rating,
-        ]);
+    // Update the book with the new data
+    $book->update([
+        'title' => $request->title,
+        'author' => $request->author,
+        'genre' => $request->genre,
+        'year' => $request->year,
+        'cover_image' => $request->cover_image,
+        'price' => $request->price,
+        'quantity' => $request->quantity,
+        'description' => $request->description,
+        'rating' => $request->rating,
+    ]);
 
-        // Redirect back to the books management page with a success message
-        return redirect()->route('books.index')->with('success', 'Book updated successfully!');
-    }
+    // Redirect back to the books management page with a success message
+    return redirect()->route('books.index')->with('success', 'Book updated successfully!');
+}
 
 
 public function removeFromCart($bookId)
@@ -506,6 +508,63 @@ public function downloadCSV()
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+public function blogIndex(Request $request)
+    {
+        // Get the current page from the request, default to 1 if not set
+        $currentPage = $request->query('page', 1);
+
+        // Validate page number
+        if ($currentPage < 1 || $currentPage > 5) {
+            $currentPage = 1;
+        }
+
+        // You can add your database queries here when you have a database set up
+        // For now, we'll use dummy data
+        $featuredPost = [
+            'title' => 'The Midnight Library: A Journey Through Possibilities',
+            'date' => 'January 18, 2025',
+            'category' => 'Novel Review',
+            'description' => "Matt Haig's profound exploration of life's infinite possibilities through the lens of a magical library that exists between life and death."
+        ];
+
+        $recentPosts = [
+            [
+                'title' => 'Tomorrow, and Tomorrow, and Tomorrow',
+                'description' => 'A stunning exploration of friendship, love, and creativity in the digital age...'
+            ],
+            [
+                'title' => 'The Starless Crown',
+                'description' => 'James Rollins crafts an epic fantasy that combines science and magic...'
+            ]
+        ];
+
+        return view('blog', [
+            'currentPage' => $currentPage,
+            'featuredPost' => $featuredPost,
+            'recentPosts' => $recentPosts
+        ]);
+    }
+
+
+
 }
 
 
@@ -550,3 +609,5 @@ public function downloadCSV()
 //     session()->forget('cart');
 
 //     return redirect()->route('books.index')->with('success', 'Thank you for your purchase! You will receive an email with the order details.');
+
+

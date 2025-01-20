@@ -239,4 +239,19 @@ Route::get('/export-transactions', [BookController::class, 'exportTransactions']
 
 // Route for viewing transactions
 Route::get('/user-transactions', [BookController::class, 'viewTransactions'])->name('transactions.view');
-Route::get('/transactions/download', [BookController::class, 'downloadCSV'])->name('transactions.downloadCSV');
+Route::get('/user_homepage', [BookController::class, 'index'])->name('user_homepage');
+
+
+Route::get('/transactions/downloadCSV', [BookController::class, 'downloadCSV'])->name('transactions.downloadCSV');
+
+
+Route::delete('/admin_users/{id}', [UserController::class, 'destroyAdmin'])->name('admin_users.destroy');
+
+
+
+// Edit User
+Route::get('/users/{id}/edit', [UserController::class, 'edit'])->name('users.edit');
+Route::put('/users/{id}', [UserController::class, 'update'])->name('users.update');
+
+// Delete User
+Route::delete('/users/{id}', [UserController::class, 'destroy'])->name('users.destroy');

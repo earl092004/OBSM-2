@@ -92,32 +92,40 @@
                                                     </div>
                                                 </div>
 
-                                                <div class="col-md-6">
-                                                    <div class="form-floating">
-                                                        <select class="form-select" name="genre" id="genre" required>
-                                                            <option value="{{ $book->genre }}" selected>{{ $book->genre }}</option>
-                                                            <option value="Fiction">Fiction</option>
-                                                            <option value="Non-Fiction">Non-Fiction</option>
-                                                            <option value="Fantasy">Fantasy</option>
-                                                            <option value="Science Fiction">Science Fiction</option>
-                                                            <option value="Mystery">Mystery</option>
-                                                            <option value="Biography">Biography</option>
-                                                            <option value="Romance">Romance</option>
-                                                            <option value="Horror">Horror</option>
-                                                            <option value="History">History</option>
-                                                            <option value="Self-Help">Self-Help</option>
-                                                            <option value="Children">Children</option>
-                                                        </select>
-                                                        <label>Genre</label>
-                                                    </div>
+                                                <div class="mb-3">
+                                                    <label for="genre" class="form-label">Genre</label>
+                                                    <select type="text" class="form-control" name="genre" id="genre" required>
+                                                    <option value="non fiction">non fiction</option>
+                                                        <option value="Action">Action</option>
+                                                        <option value="Adventure">Adventure</option>
+                                                        <option value="Comedy">Comedy</option>
+                                                        <option value="Crime and mystery">Crime and mystery</option>
+                                                        <option value="Fantasy">Fantasy</option>
+                                                        <option value="Historical">Historical</option>
+                                                        <option value="Historical fiction">Historical fiction</option>
+                                                        <option value="Horror">Horror</option>
+                                                        <option value="Romance">Romance</option>
+                                                        <option value="Satire">Satire</option>
+                                                        <option value="Science fiction">Science fiction</option>
+                                                        <option value="Cyberpunk and derivatives">Cyberpunk and derivatives</option>
+                                                        <option value="Thriller">Thriller</option>
+                                                        <option value="Isekai">Isekai</option>
+                                                        <option value="fictional">fictional</option>
+                                                    </select>
                                                 </div>
 
                                                 <div class="col-md-6">
                                                     <div class="form-floating">
-                                                        <input type="date" class="form-control" name="year" id="year" value="{{ $book->year }}" required>
-                                                        <label>Year</label>
+                                                        <select class="form-select" name="year" id="year" required>
+                                                            <option value="" selected disabled>Select Year</option>
+                                                            @for ($year = 2025; $year >= 1970; $year--)
+                                                                <option value="{{ $year }}">{{ $year }}</option>
+                                                            @endfor
+                                                        </select>
+                                                        <label for="year">Year</label>
                                                     </div>
                                                 </div>
+
 
                                                 <div class="col-12">
                                                     <div class="form-floating">
@@ -207,25 +215,103 @@
 {{-- Add Book Modal --}}
 <div class="modal fade" id="addBookModal" tabindex="-1">
     <div class="modal-dialog modal-dialog-centered modal-lg">
-        <div class="modal-content border-0">
-            <div class="modal-header bg-primary bg-opacity-10">
-                <h5 class="modal-title text-primary">Add New Book</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Add New Book</h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
             </div>
-            <div class="modal-body p-4">
+            <div class="modal-body">
                 <form action="{{ route('books.store') }}" method="POST">
                     @csrf
-                    {{-- Add Book form fields (similar structure to edit form) --}}
-                    <div class="text-end mt-4">
-                        <button type="button" class="btn btn-light me-2" data-bs-dismiss="modal">Cancel</button>
-                        <button type="submit" class="btn btn-primary px-4">Add Book</button>
+                    <div class="mb-3">
+                        <label for="title" class="form-label">Book Title</label>
+                        <input type="text" class="form-control" name="title" id="title" required>
                     </div>
+
+                    <div class="mb-3">
+                        <label for="author" class="form-label">Author</label>
+                        <input type="text" class="form-control" name="author" id="author" required>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="genre" class="form-label">Genre</label>
+                        <select type="text" class="form-control" name="genre" id="genre" required>
+                        <option value="non fiction">non fiction</option>
+                            <option value="Action">Action</option>
+                            <option value="Adventure">Adventure</option>
+                            <option value="Comedy">Comedy</option>
+                            <option value="Crime and mystery">Crime and mystery</option>
+                            <option value="Fantasy">Fantasy</option>
+                            <option value="Historical">Historical</option>
+                            <option value="Historical fiction">Historical fiction</option>
+                            <option value="Horror">Horror</option>
+                            <option value="Romance">Romance</option>
+                            <option value="Satire">Satire</option>
+                            <option value="Science fiction">Science fiction</option>
+                            <option value="Cyberpunk and derivatives">Cyberpunk and derivatives</option>
+                            <option value="Thriller">Thriller</option>
+                            <option value="Isekai">Isekai</option>
+                            <option value="fictional">fictional</option>
+                        </select>
+                    </div>  
+
+                    <div class="col-md-6">
+                        <div class="form-floating">
+                            <select class="form-select" name="year" id="year" required>
+                                <option value="" selected disabled>Select Year</option>
+                                @for ($year = 2025; $year >= 1970; $year--)
+                                    <option value="{{ $year }}">{{ $year }}</option>
+                                @endfor
+                            </select>
+                            <label for="year">Year</label>
+                        </div>
+                    </div>
+                    <div class="mb-3">
+                        <label for="cover_image" class="form-label">Cover Image URL</label>
+                        <input type="url" class="form-control" name="cover_image" id="cover_image" required>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="price" class="form-label">Price</label>
+                        <input type="number" step="0.01" class="form-control" name="price" id="price" required>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="quantity" class="form-label">Quantity</label>
+                        <input type="number" class="form-control" name="quantity" id="quantity" required>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="description" class="form-label">Short Description</label>
+                        <textarea class="form-control" name="description" id="description" rows="3" required></textarea>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="rating" class="form-label">Rating</label>
+                        <select name="rating" id="rating" class="form-control" required>
+                            <option value="1">1 Star</option>
+                            <option value="2">2 Stars</option>
+                            <option value="3">3 Stars</option>
+                            <option value="4">4 Stars</option>
+                            <option value="5">5 Stars</option>
+                        </select>
+                    </div>
+
+                    <button type="submit" class="btn btn-primary">Add Book</button>
                 </form>
+
             </div>
         </div>
     </div>
 </div>
-
+<script>
+    document.querySelectorAll('input[type="number"]').forEach(input => {
+        input.addEventListener('input', function(event) {
+            // Remove any non-numeric characters, except for period and minus sign
+            event.target.value = event.target.value.replace(/[^0-9]/g, '');
+        });
+    });
+</script>
 <style>
 .table th {
     font-weight: 600;

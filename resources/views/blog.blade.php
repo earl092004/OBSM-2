@@ -16,29 +16,34 @@
         <div class="col-lg-8">
             <!-- Featured Story Review -->
             <article class="mb-5">
-                <img src="https://via.placeholder.com/800x400" class="img-fluid rounded mb-3" alt="Featured Book">
+                <center><img src="https://th.bing.com/th/id/OIP.avm_YDR9qPIhVFuSNCO-BQHaLH?rs=1&pid=ImgDetMain" style="width: 200px" height="100px"  class="img-fluid rounded mb-3" alt="Featured Book"></center>
                 <div class="mb-3">
-                    <span class="text-muted">{{ $featuredPost['date'] }}</span>
+                    <span class="text-muted">January 19, 2025</span>
                     <span class="mx-2">&bull;</span>
-                    <span class="text-muted">{{ $featuredPost['category'] }}</span>
+                    <span class="text-muted">Fiction</span>
                 </div>
-                <h2 class="mb-3">{{ $featuredPost['title'] }}</h2>
-                <p class="lead mb-4">{{ $featuredPost['description'] }}</p>
-                <p>Dive into an enchanting world of books, from timeless classics to modern masterpieces. Rediscover why stories are at the heart of human connection.</p>
+                <h2 class="mb-3">The Adventures of Sherlock Holmes</h2>
+                <p class="lead mb-4">A thrilling series of stories following the famous detective, Sherlock Holmes, and his trusty companion, Dr. Watson, as they solve various mysteries in Victorian London.</p>
+                <p>Dive into the world of deduction, clever twists, and unforgettable characters. Sherlock Holmes is not just a detective; he’s a cultural icon.</p>
             </article>
 
             <!-- Recent Book Reviews -->
             <h3 class="mb-4">Recent Reads</h3>
             <div class="row mb-4">
-                @foreach($recentPosts as $post)
                 <div class="col-md-6 mb-4">
                     <article>
-                        <img src="https://via.placeholder.com/400x250" class="img-fluid rounded mb-3" alt="{{ $post['title'] }}">
-                        <h4>{{ $post['title'] }}</h4>
-                        <p class="text-muted">{{ $post['description'] }}</p>
+                        <img src="https://cdn.britannica.com/94/181394-050-2F76F7EE/Reproduction-cover-edition-The-Catcher-in-the.jpg" width="180" class="img-fluid rounded mb-3" alt="Featured Book">
+                        <h4>The Catcher in the Rye</h4>
+                        <p class="text-muted">A young man's reflections on life, society, and growing up.</p>
                     </article>
                 </div>
-                @endforeach
+                <div class="col-md-6 mb-4">
+                    <article>
+                        <img src="https://d28hgpri8am2if.cloudfront.net/book_images/onix/cvr9781471173936/the-great-gatsby-9781471173936_hr.jpg" width="170" class="img-fluid rounded mb-3" alt="Featured Book">
+                        <h4>The Great Gatsby</h4>
+                        <p class="text-muted">A look at the American Dream in the roaring 1920s.</p>
+                    </article>
+                </div>
             </div>
         </div>
 
@@ -48,19 +53,22 @@
                 <h4 class="mb-3">About Us</h4>
                 <p class="text-muted">Patch Online Bookstore is your digital companion for exploring books, reviews, and author insights. Join us to find your next favorite read.</p>
             </div>
-
         </div>
     </div>
 
     @elseif($currentPage == 2)
     <div class="row">
         <div class="col-lg-8">
-            <h2 class="mb-4">Exploring Short Stories</h2>
+            <h2 class="mb-4">Exploring Short Stories</h2><br>
+
+       <img src="https://cdna.artstation.com/p/assets/images/images/060/659/660/large/untai-studio-cover-book-final-resize.jpg?1679031781" style="width: 200px" height="100px"  class="img-fluid rounded mb-3" alt="Featured Book">
             <article class="mb-5">
                 <h3>"Whispers of the Woods" by Clara Jensen</h3>
-                <p>Discover the tale of a young girl who finds solace and adventure in an enchanted forest, unraveling its secrets along the way.</p>
+                <p>Deep within the heart of an ancient forest, where sunlight filtered through a canopy of emerald leaves and the air was thick with the scent of moss and earth, there existed a hidden glade untouched by time. It was said that within this sacred grove, whispers danced among the trees, carrying tales of forgotten magic and untold secrets.</p>
+                <br>
+                <img src="https://m.media-amazon.com/images/M/MV5BNzJiYWQ2OTctOWU2MS00ODk1LWJhOWMtZWUzYmI5YTUzNDk2XkEyXkFqcGdeQXVyOTkwMTE1Mzk@._V1_UY1200_CR115,0,630,1200_AL_.jpg" style="width: 200px" height="100px"  class="img-fluid rounded mb-3" alt="Featured Book">
                 <h3>"Echoes of the Past" by Daryl Parker</h3>
-                <p>A suspenseful journey through time as a historian uncovers a hidden diary that changes everything.</p>
+                <p>Memories are the  threads  that weave  the  fabric of our  identities,  connecting  our  past  to  our present and shaping our future. They are integral to our sense of self, enabling us to learn, adapt, and  thrive in an ever-changing  world.</p>
             </article>
         </div>
     </div>
@@ -70,8 +78,11 @@
         <div class="col-lg-8">
             <h2 class="mb-4">Spotlight on Authors</h2>
             <article class="mb-5">
+                <img src="https://www.kiis1011.com.au/wp-content/uploads/sites/3/2022/08/JK-Rowling-header.jpg?crop=0px,0px,1919px,1080px&resize=2400,1350&quality=75" style="width: 700px" height="100px"  class="img-fluid rounded mb-3" alt="Featured Book">
                 <h3>J.K. Rowling</h3>
                 <p>The mastermind behind the Harry Potter series, Rowling continues to inspire millions with her magical storytelling.</p>
+                <br>
+                <img src="https://media1.popsugar-assets.com/files/thumbor/574igOiJbaWU6Gv9mb4tBqT7VUI/fit-in/2048xorig/filters:format_auto-!!-:strip_icc-!!-/2019/05/21/634/n/1922283/tmp_2CvDSv_6743f3c69288fcc0_GettyImages-1134765970.jpg" style="width: 700px" height="100px"  class="img-fluid rounded mb-3" alt="Featured Book">
                 <h3>George R.R. Martin</h3>
                 <p>The epic tales of Westeros have cemented Martin as a fantasy legend. Explore his works beyond the Game of Thrones series.</p>
             </article>
@@ -85,6 +96,7 @@
             <article class="mb-5">
                 <h3>"The Book Thief" by Markus Zusak</h3>
                 <p>A gripping tale set in Nazi Germany, exploring the power of words and the resilience of the human spirit.</p>
+                <img src="https://www.penguinrandomhouse.co.za/sites/penguinbooks.co.za/files/cover/The%20Book%20Thief%209781784162122.jpg" style="width: 200px" height="100px"  class="img-fluid rounded mb-3" alt="Featured Book">
             </article>
         </div>
     </div>

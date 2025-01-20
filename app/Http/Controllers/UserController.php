@@ -58,7 +58,11 @@ public function updateAdmin(Request $request, $id)
 
 public function destroyAdmin($id)
 {
-    User::destroy($id);
+    // Use the correct model, e.g., User or AdminUser
+    $admin = User::findOrFail($id); // Find admin by ID
+    $admin->delete(); // Delete the admin
+
+    // Redirect with success message
     return redirect()->route('admin_users.index')->with('success', 'Admin deleted successfully.');
 }
 
@@ -219,6 +223,62 @@ public function deleteAccount()
     // Redirect to the homepage with a success message
     return redirect()->route('home')->with('success', 'Your account has been deleted.');
 }
+
+
+public function edit($id)
+{
+    $user = User::findOrFail($id);
+    return view('users.edit', compact('user')); // Pass the user to the edit view
+}
+
+
+
+public function update(Request $request, $id)
+{
+    // Find the user by their ID
+    $user = User::findOrFail($id);
+
+    // Validate the input data
+    $request->validate([
+        'name' => 'required|string|max:255',
+        'email' => 'required|email|max:255|unique:users,email,' . $user->id, // Ignore the current user's email
+        'subscription_type' => 'required|string|max:255',
+        'password' => 'nullable|string|min:6|confirmed', // The new password must be confirmed (nullable)
+    ]);
+
+    // Verify the current password entered by the user
+    // if (!Hash::check($request->current_password, $user->password)) {
+    //     return redirect()->back()->withErrors(['current_password' => 'Current password is incorrect.']);
+    // }
+
+    // If the new password is filled, hash it and update the password
+    if ($request->filled('password')) {
+        $user->password = Hash::make($request->password); // Hash the new password
+    }
+
+    // Update other fields that are not password-related
+    $user->name = $request->name;
+    $user->email = $request->email;
+    $user->subscription_type = $request->subscription_type;
+
+    // Save the updated user information
+    $user->save();
+
+    // Redirect with a success message
+    return redirect()->route('users.index')->with('success', 'User updated successfully!');
+}
+
+
+public function destroy($id)
+{
+    $user = User::findOrFail($id);
+    $user->delete();
+
+    return redirect()->route('users.index')->with('success', 'User deleted successfully!');
+}
+
+
+
  }
 
 
