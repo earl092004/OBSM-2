@@ -145,9 +145,7 @@
 
 <body>
     <div class="login-container">
-        <a href="{{ route('user_homepage') }}" class="back-button">
-            ← Back to Home
-        </a>
+
 
         <h1>Welcome To Patch Bookstore</h1>
 
@@ -189,6 +187,9 @@
 
         <div class="signup-link">
             <p>Don't have an account? <a href="{{ route('create-user') }}">Sign up here</a></p>
+        </div>
+        <div class="signup-link">
+            <p>Are you an Admin? <a href="{{ route('admin.login.form') }}">Login here</a></p>
         </div>
     </div>
 

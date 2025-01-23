@@ -9,24 +9,29 @@ class AuthenticatedSessionController extends Controller
 {
     public function store(Request $request)
     {
-
+        // Validate the login credentials
         $credentials = $request->only('email', 'password');
 
         // Attempt to log the user in
         if (Auth::attempt($credentials)) {
             $request->session()->regenerate();
 
-            // Check if the user is admin or regular user
+            // Check if the logged-in user is an admin
             if (Auth::user()->role === 'admin') {
-                return redirect()->route('home'); // Admin homepage route
+                // Redirect to admin dashboard or homepage
+                return redirect()->route('home'); // Replace with the correct admin route
             }
 
-            return redirect()->route('user_homepage'); // Regular user homepage route
+            // Redirect to user homepage for regular users
+            return redirect()->route('user_homepage'); // Replace with the correct user route
         }
 
+        // If login fails, return back with an error message
         return back()->withErrors([
             'email' => 'The provided credentials do not match our records.',
         ]);
     }
-
 }
+
+
+

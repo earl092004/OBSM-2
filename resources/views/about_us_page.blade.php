@@ -230,7 +230,7 @@
             <div class="position-relative">
                 <h2 class="display-4 fw-bold mb-4">Join Us on Our Journey</h2>
                 <p class="lead mb-4">Discover the joy of reading with us. Together, we can build a world where stories connect us all.</p>
-                <a href="/books" class="btn btn-custom btn-lg">Browse Books</a>
+                <a href="/user_list_of_books" class="btn btn-custom btn-lg">Browse Books</a>
             </div>
         </section>
     </div>

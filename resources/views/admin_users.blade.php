@@ -3,6 +3,11 @@
 
 @section('content')
 <div class="container mt-5">
+    @if(session('success'))
+    <div class="alert alert-success mt-3">
+        {{ session('success') }}
+    </div>
+    @endif
     <h1 class="text-center mb-4">Admin Users</h1>
 
     <!-- Display Current Admins -->
@@ -106,11 +111,7 @@
         </button>
     </div>
 
-    @if(session('success'))
-    <div class="alert alert-success mt-3">
-        {{ session('success') }}
-    </div>
-    @endif
+
 
     <!-- Add Admin Modal -->
     <div class="modal fade" id="addAdminModal" tabindex="-1" aria-labelledby="addAdminModalLabel" aria-hidden="true">

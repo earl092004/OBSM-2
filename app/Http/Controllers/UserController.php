@@ -11,6 +11,9 @@ use App\Http\Middleware;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Spatie\Permission\Models\Role;
+use Illuminate\Support\Facades\Log;
+
+
 class UserController extends Controller
 {
 
@@ -38,7 +41,15 @@ class UserController extends Controller
     public function adminIndex()
     {
         $admins = User::where('role', 'admin')->get();
+        return view('home', compact('admins'));
+
+    }
+
+    public function adminView()
+    {
+        $admins = User::where('role', 'admin')->get();
         return view('admin_users', compact('admins'));
+
     }
 
 
@@ -83,25 +94,36 @@ public function destroyAdmin($id)
 
     public function store(Request $request)
 {
-    $validatedData = $request->validate([
-        'name' => 'required|string|max:255',
-        'email' => 'required|email|unique:users,email',
-        'phone_number' => 'required|string|max:15',
-        'subscription_type' => 'required|in:regular,silver,premium',
-        'password' => 'required|confirmed|min:8',
-    ]);
+    try {
+        // Validate the request data
+        $validatedData = $request->validate([
+            'name' => 'required|string|max:255',
+            'email' => 'required|email|unique:users,email',
+            // Adjusted phone number validation to allow spaces, dashes, and parentheses
+            'phone_number' => 'required|string|regex:/^(\+?[0-9]{1,4})?[\s\(\)-]*[0-9]{1,5}[\s\(\)-]*[0-9]{1,4}[\s\(\)-]*[0-9]{1,4}$/',
+            'subscription_type' => 'required|in:regular,silver,premium',
+            'password' => 'required|confirmed|min:8',  // Removed regex and only require min length
+        ]);
 
-    // Create user
-    User::create([
-        'name' => $validatedData['name'],
-        'email' => $validatedData['email'],
-        'phone_number' => $validatedData['phone_number'],
-        'subscription_type' => $validatedData['subscription_type'],
-        'password' => bcrypt($validatedData['password']),  // Hash the password before storing
-    ]);
+        // Create the user in the database
+        User::create([
+            'name' => $validatedData['name'],
+            'email' => $validatedData['email'],
+            'phone_number' => $validatedData['phone_number'],
+            'subscription_type' => $validatedData['subscription_type'],
+            'password' => bcrypt($validatedData['password']),  // Hash the password before storing
+        ]);
 
-    return redirect()->route('login')->with('success', 'User created successfully, please Login ');
+        // Redirect with success message
+        return redirect()->route('login')->with('success', 'User created successfully, please Login');
+    } catch (\Exception $e) {
+        // Log the error and return with a message
+        Log::error('Error creating user: ' . $e->getMessage());
+        return back()->withErrors(['error' => 'An error occurred while creating the user. Please try again later.']);
+    }
 }
+
+
 
 
 

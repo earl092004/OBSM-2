@@ -234,9 +234,6 @@
                             {{ auth()->user()->name }}
                         </a>
                         <ul class="dropdown-menu dropdown-menu-end animate slideIn" aria-labelledby="navbarDropdown">
-                            <li><a class="dropdown-item" href="{{ route('profile.show') }}">
-                                <i class="fas fa-user-circle me-2"></i>Profile
-                            </a></li>
                             <li><hr class="dropdown-divider"></li>
                             <li>
                                 <form action="{{ route('logout') }}" method="POST" id="logout-form">
@@ -319,26 +316,60 @@
     </footer>
 
     <!-- Cart Modal -->
-    <div class="modal fade" id="addToCartModal" tabindex="-1" aria-labelledby="addToCartModalLabel" aria-hidden="true">
+    <div class="modal fade" id="cartModal" tabindex="-1" aria-labelledby="cartModalLabel" aria-hidden="true">
         <div class="modal-dialog modal-lg">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="addToCartModalLabel">Add to Cart</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    <h5 class="modal-title">
+                        <i class="fas fa-shopping-cart me-2"></i>Your Cart
+                    </h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
                 </div>
                 <div class="modal-body">
-                    <!-- Book Details Display -->
-                    <div id="book-details">
-                        <!-- Book info will be injected here -->
-                    </div>
+                    @if(isset($cartItems) && $cartItems->count() > 0)
+                        <ul class="list-group list-group-flush">
+                            @foreach ($cartItems as $item)
+                                <li class="list-group-item" id="cart-item-{{ $item->book->id }}">
+                                    <div class="d-flex justify-content-between align-items-center">
+                                        <div>
+                                            <h6 class="mb-1">{{ $item->book->title }}</h6>
+                                            <p class="text-muted mb-0">Author: {{ $item->book->author }}</p>
+                                            <p class="text-primary mb-0">Price: PHP{{ number_format($item->book->price, 2) }}</p>
+                                            <p class="text-muted mb-0">Quantity: {{ $item->quantity }}</p> <!-- Show Quantity -->
+                                        </div>
+                                        <form action="{{ route('removeFromCart', $item->book->id) }}" method="POST">
+                                            @csrf
+                                            @method('DELETE')
+                                            <button type="submit" class="btn btn-outline-danger btn-sm">
+                                                <i class="fas fa-trash-alt"></i> Remove
+                                            </button>
+                                        </form>
+                                    </div>
+                                </li>
+                            @endforeach
+                        </ul>
+                        <div class="d-flex justify-content-between mt-3">
+                            <h5>Total: </h5>
+                            <p>PHP {{ number_format(session('totalAmount', 0), 2) }}</p> <!-- Display Total Amount -->
+                        </div>
+                    @else
+                        <p>No items in the cart.</p>
+                    @endif
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                    <button type="button" class="btn btn-primary" id="add-to-cart-btn">Add to Cart</button>
+                    <!-- Checkout Form -->
+                    <form action="{{ route('checkout') }}" method="POST">
+                        @csrf
+                        <button type="submit" class="btn btn-success">
+                            <i class="fas fa-check me-1"></i> Checkout
+                        </button>
+                    </form>
                 </div>
             </div>
         </div>
     </div>
+
 
     <!-- Cart Modal -->
     <!-- Cart Modal -->

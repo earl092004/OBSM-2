@@ -13,6 +13,9 @@
                 data-bs-target="#addBookModal">
             <i class="fas fa-plus me-2"></i>Add New Book
         </button>
+
+        <button class="btn btn-primary" id="triggerAIButton">Activate AI</button>
+
     </div>
 
     {{-- Table Section --}}
@@ -253,7 +256,7 @@
                             <option value="Isekai">Isekai</option>
                             <option value="fictional">fictional</option>
                         </select>
-                    </div>  
+                    </div>
 
                     <div class="col-md-6">
                         <div class="form-floating">
@@ -304,6 +307,7 @@
         </div>
     </div>
 </div>
+
 <script>
     document.querySelectorAll('input[type="number"]').forEach(input => {
         input.addEventListener('input', function(event) {
@@ -312,7 +316,47 @@
         });
     });
 </script>
+
+<script>
+    // Add event listener to the 'Activate AI' button
+    document.getElementById('triggerAIButton').addEventListener('click', function() {
+        // Disable the button to prevent multiple clicks
+        this.disabled = true;
+        this.textContent = 'Processing...';
+
+        // Make the POST request to trigger the fetch command
+        fetch("{{ route('trigger.fetch.books') }}", {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRF-TOKEN': '{{ csrf_token() }}',
+            },
+            body: JSON.stringify({})
+        })
+        .then(response => {
+            if (!response.ok) {
+                return Promise.reject('Failed to fetch books');
+            }
+            return response.json();
+        })
+        .then(data => {
+            // Notify the user about the success
+            alert(data.message);
+            this.textContent = 'Activate AI'; // Reset the button text
+            this.disabled = false; // Enable the button again
+        })
+        .catch(error => {
+            // Handle errors
+            console.error('Error:', error);
+            alert('Error: ' + error.message);
+            this.textContent = 'Activate AI'; // Reset the button text
+            this.disabled = false; // Enable the button again
+        });
+    });
+</script>
+
 <style>
+
 .table th {
     font-weight: 600;
     text-transform: uppercase;

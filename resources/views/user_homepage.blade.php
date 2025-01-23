@@ -186,24 +186,24 @@
                         <!-- Popular Posts -->
                         <div class="card border-0 shadow-sm mb-4">
                             <div class="card-body">
-                                <h4 class="card-title">Popular Posts</h4>
+                                <h4 class="card-title">Popular Books</h4>
                                 <div class="list-group list-group-flush">
-                                    <a href="#" class="list-group-item list-group-item-action">
+                                    <a href="best_sellers" class="list-group-item list-group-item-action">
                                         <div class="d-flex w-100 justify-content-between">
-                                            <h6 class="mb-1">Best Summer Reads 2025</h6>
-                                            <small class="text-muted">3 days ago</small>
+                                            <h6 class="mb-1">kakarai josu no takagi san</h6>
+                                            <small class="text-muted"></small>
                                         </div>
                                     </a>
-                                    <a href="#" class="list-group-item list-group-item-action">
+                                    <a href="best_sellers" class="list-group-item list-group-item-action">
                                         <div class="d-flex w-100 justify-content-between">
-                                            <h6 class="mb-1">Interview with Stephen King</h6>
-                                            <small class="text-muted">5 days ago</small>
+                                            <h6 class="mb-1">Harry Potter and the Philosopher's Stone</h6>
+                                            <small class="text-muted"></small>
                                         </div>
                                     </a>
-                                    <a href="#" class="list-group-item list-group-item-action">
+                                    <a href="best_sellers" class="list-group-item list-group-item-action">
                                         <div class="d-flex w-100 justify-content-between">
-                                            <h6 class="mb-1">Top 10 Mystery Novels</h6>
-                                            <small class="text-muted">1 week ago</small>
+                                            <h6 class="mb-1">The Final Horizon</h6>
+                                            <small class="text-muted"></small>
                                         </div>
                                     </a>
                                 </div>
