@@ -202,9 +202,28 @@ public function addToCart($bookId)
         ]);
     }
 
+    // Update the total amount in the session
+    $this->updateCartTotalAmount($user);
+
     // Redirect or return back to the page
     return back(); // This will return to the previous page
 }
+
+private function updateCartTotalAmount($user)
+{
+    // Get all the user's cart items
+    $cartItems = Cart::where('user_id', $user->id)->get();
+
+    // Calculate the total amount
+    $totalAmount = 0;
+    foreach ($cartItems as $item) {
+        $totalAmount += $item->book->price * $item->quantity;
+    }
+
+    // Store the total amount in the session
+    session(['totalAmount' => $totalAmount]);
+}
+
 
 
 
@@ -254,6 +273,9 @@ public function removeFromCart($bookId)
     if ($cartItem) {
         $cartItem->delete();  // Remove the cart item
     }
+
+    // Update the total amount in the session
+    $this->updateCartTotalAmount($user);
 
     return back(); // Return back to the current page
 }
@@ -312,13 +334,13 @@ public function deleteCartItem($cartItemId)
     return redirect()->route('user_homepage')->with('success', 'Item removed from cart.');
 }
 
-public function showFeaturedBooks()
-{
-    // Fetch books with rating 4 or 5
-    $books = Book::whereIn('rating', [4, 5])->get();
+// public function showFeaturedBooks()
+// {
+//     // Fetch books with rating 4 or 5
+//     $books = Book::whereIn('rating', [4, 5])->get();
 
-    return view('user_homepage', compact('books'));
-}
+//     return view('user_homepage', compact('books'));
+// }
 
 
 
@@ -393,7 +415,8 @@ public function checkout()
         Cart::where('user_id', $user->id)->delete();
 
         // Return a success message
-        return back()->with('success', 'Thank you for your purchase! Your order has been successfully placed.');
+        return back()->with('success', 'Thank you for your purchase! Your order has been successfully placed! Well Send you the Book Via Email!')
+                     ->with('totalAmount', $totalAmount);  // Pass the total amount to the view
     } catch (\Exception $e) {
         // Rollback transaction in case of any error
         DB::rollback();
@@ -404,6 +427,7 @@ public function checkout()
         return back()->with('error', 'There was an error during checkout. Please try again.');
     }
 }
+
 
 
 public function getDashboardData()
